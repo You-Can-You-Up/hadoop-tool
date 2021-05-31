@@ -1,0 +1,48 @@
+version: '3'
+services:
+   cluster-master:
+      image: dockerused/centos:hadoop-spark
+      container_name: cluster-master
+      hostname: master
+      restart: always
+      tty: true
+      privileged: true
+      ports:
+         - "50070:50070"
+         - "8080:8080"
+         - "8088:8088"
+      depends_on:
+         - cluster-slave1
+         - cluster-slave2
+           #command: /bin/bash "./root/soft/shell/run_master.sh"
+      networks:
+         extnetwork:
+            ipv4_address: 172.15.0.2
+
+   cluster-slave1:
+      image: dockerused/centos:hadoop-spark
+      container_name: cluster-slave1
+      hostname: slave1
+      restart: always
+      tty: true
+      privileged: true
+      networks:
+         extnetwork:
+            ipv4_address: 172.15.0.3
+
+   cluster-slave2:
+      image: dockerused/centos:hadoop-spark
+      container_name: cluster-slave2
+      hostname: slave2
+      restart: always
+      tty: true
+      privileged: true
+      networks:
+         extnetwork:
+            ipv4_address: 172.15.0.4
+ 
+networks:
+   extnetwork:
+      external: 
+         name: netgroup
+

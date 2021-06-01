@@ -5,8 +5,11 @@ services:
       container_name: cluster-master
       hostname: master
       restart: always
-      tty: true
       privileged: true
+      #stdin_open: true
+      tty: true
+      #entrypoint: bin/bash
+      command: bash -c "source /root/.bashrc && root/soft/shell/run_master.sh && bash"
       ports:
          - "50070:50070"
          - "8080:8080"
@@ -14,7 +17,11 @@ services:
       depends_on:
          - cluster-slave1
          - cluster-slave2
-           #command: /bin/bash "./root/soft/shell/run_master.sh"
+      deploy:
+         resources:
+             limits:
+                 cpus: '2'
+                 memory: 1000M
       networks:
          extnetwork:
             ipv4_address: 172.15.0.2
@@ -26,6 +33,11 @@ services:
       restart: always
       tty: true
       privileged: true
+      deploy:
+         resources:
+             limits:
+                 cpus: '2'
+                 memory: 1000M
       networks:
          extnetwork:
             ipv4_address: 172.15.0.3
@@ -37,6 +49,11 @@ services:
       restart: always
       tty: true
       privileged: true
+      deploy:
+         resources:
+             limits:
+                 cpus: '2.0'
+                 memory: 1000M
       networks:
          extnetwork:
             ipv4_address: 172.15.0.4
